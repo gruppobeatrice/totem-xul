@@ -9,10 +9,16 @@ var Config ={
         .getService(Components.interfaces.nsIPrefBranch),
     
     getPrefs: function (str){
-        try {
-            return this.prefs.getCharPref("totem."+str);
-        } catch (e) {
-            return null;
-        }
+        var value = null;
+        var prefs = new Array (
+                this.prefs.getCharPref,
+                this.prefs.getIntPref,
+                this.prefs.getBoolPref
+            );
+        for (var i = 0; i < prefs.length; i++)
+            try {
+                value = prefs[i]("totem."+str);
+            } catch (e) { }
+        return value;
     }
 }

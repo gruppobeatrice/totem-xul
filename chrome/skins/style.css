@@ -1,6 +1,8 @@
 window{
 padding: 0px;
 margin: 0px;
+font-family: "Trebuchet MS", sans-serif;
+font-size: 12pt;
 }
 
 #heading{
@@ -14,7 +16,8 @@ font-weight: bold;
 
 #title{
 background: url(chrome://totem/skin/bgtotem.png ) repeat-x  top left;
-height: 140px;
+min-height: 140px;
+height: 85pt; /*140px;*/
 padding: 0px;
 margin-left: 240px;
 -moz-box-align: baseline;
@@ -25,18 +28,17 @@ font-size: medium;
 }
 
 #hticker{
-padding-right: 10px;
-padding-bottom: 10px;
+padding-right: 0.5cm;
+padding-bottom: 0.5cm;
 background: url(chrome://totem/skin/bgtotem.png ) repeat-x  top left;
--moz-border-radius: 0px 0px 10px 10px;
+/*-moz-border-radius: 0px 0px 0.5cm 0.5cm;*/
 /*border: solid 1px #f0f0f0;*/
 overflow: hidden;
 }
 
 #hidden{
--moz-border-radius: 10px;
+-moz-border-radius: 0.5cm;
 height: 60px;
-background: yellow;
 }
 
 #datetime{
@@ -44,18 +46,144 @@ overflow: hidden;
 }
 
 #newsticker{
-border-top: dotted 1px #000;
-padding-left: 104px;
-background: url(chrome://totem/skin/rss.png ) no-repeat center left;
+/*border-top: dotted 1px #000;*/
+/*padding-left: 104px;
+background: url(chrome://totem/skin/rss.png ) no-repeat center left;*/
+padding: 0cm;
+margin: 0cm;
 }
 
-#rsstitle{
-font-size: 60pt;
+.rsstitle{
+font-size: 50pt;
 font-family: "Trebuchet MS", sans-serif;
+font-weight: bold;
+padding-left: 2cm;
 }
 
-#rsstext{
+#rsstitlescroll .first{
+background: transparent url(chrome://totem/skin/rss-small.png ) no-repeat 2cm center;
+padding-left: 4cm;
+font-size: 30pt;
+line-height: 40pt;
+min-height: 51px;
+color: #a40000;
+/*border: solid 0.2cm #a40000;*/
+}
+
+#rsstitlescroll{
+background: transparent url(chrome://totem/skin/bgtitle.png) repeat-x left top;
+border-top: solid 0.03cm #FFF;
+-moz-outline: solid 0.01cm #BBB;
+margin: 0cm;
+padding: 0cm;
+-moz-box-align: center;
+}
+
+
+.rsstext{
 /*display: none;*/
 font-family: Arial, Helvetica, sans-serif;
 font-size: 20pt;
+}
+
+#rsstextscroll{
+padding: 0cm;
+margin: 0cm;
+}
+
+#rsstextscroll .first{
+background: transparent url(chrome://totem/skin/rss-micro.gif) no-repeat 2cm center;
+padding-left: 4cm;
+}
+
+#beforeschedule{
+background: transparent url(chrome://totem/skin/bgtotem.png) repeat-x top left;
+margin: 0px 0.2cm 0px 0.2cm;
+}
+
+#schedule{
+/*overflow: hidden;*/
+margin: 0.1cm;
+padding-top: 20pt;
+background-color: Window;
+}
+
+#eventtitle,
+#scheduletitle{
+line-height: 20pt;
+font-size: 20pt;
+font-weight: bold;
+padding-left: 0.2cm;
+padding-top: 0.3cm;
+margin-bottom: 0.2cm;
+background: #EEE url(chrome://totem/skin/bgtitle.png) repeat-x left top;
+border-top: solid 0.03cm #FFF;
+-moz-outline: solid 0.01cm #BBB;
+}
+
+.course {
+-moz-border-radius: 0.1cm;
+padding: 0.2cm;
+margin: 0.3cm;
+}
+
+#schedule .left {
+background: #fff;
+}
+
+.courseTitle {
+font-size: 200%;
+font-weight: bold;
+}
+
+.courseCourse {
+font-size: 150%
+}
+
+#event{
+position: absolute;
+width: 0cm;
+height: 0cm;
+top: 0;
+left:0;
+border-top: solid 0.02cm #FFF;
+background: Window url(chrome://totem/skin/bgtotem2.png) repeat-x bottom left;
+-moz-outline: solid 0.01cm #BBB;
+}
+
+#eventinlay{
+}
+
+
+#eventsummary {
+font-family: Tahoma, Helvetica, sans-serif;
+font-weight: bold;
+font-size: 110%;
+text-align: justify;
+margin-bottom: 0.5cm;
+}
+
+#eventdescription {
+font-family: Tahoma, Helvetica, sans-serif;
+font-size: 14pt;
+text-align: justify;
+}
+
+#stats,
+#eval {
+display: none;
+position: absolute;
+top: 100%;
+left: 0;
+padding: 100%;
+margin: 100%;
+z-index: 100;
+/*height: 0cm;
+overflow: auto;*/
+border-top: solid 0.02cm #FFF;
+-moz-outline: solid 0.01cm #BBB;
+}
+
+.title{
+background: Window url(chrome://totem/skin/bgtitle.png) repeat-x left top;
 }

@@ -1,55 +1,23 @@
 /*
- * Datasource interfaces
+ * Manipolazione di feed RSS, datasource RDF, file, ecc.
  */
 
-function RSSData(source, onLoadFunction){
 
-    // Init permette di ricaricare in modo asincrono il feed ogni ora
-    this.Init = function(thisObj){
-        thisObj.feeds = new Array();
+function RSSData(source){
 
-        // richieste documenti asincrone
-        thisObj.req = new XMLHttpRequest();
-        thisObj.req.open('GET', source, false);
-        thisObj.req.overrideMimeType('text/xml');
-        thisObj.req.send(null);
+    this.source = source;
+    this.feeds = new Array();
+    // richieste documenti asincrone
+    this.req = new XMLHttpRequest();
+    this.req.mozBackgroundRequest = true;
 
-        // listener per gli eventi del feed
-        thisObj.handleResult = function (result){
-            var feedTemp = new Array();
-            var feed = result.doc.QueryInterface(Components.interfaces.nsIFeed);
-            if (!feed.items.length)
-                return;
-            for (var i=0; i<feed.items.length; i++){
-                var feeditem = feed.items.queryElementAt(i,
-                    Components.interfaces.nsIFeedEntry);
+    setTimeout(this.Init, 1000, this);
+}
 
-                feedTemp.push({title: feeditem.title.text,
-                      pubdate: new Date(feeditem.updated),
-                      description: (feeditem.summary?feeditem.summary.text:feeditem.content.text)
-                      });
-            }
+RSSData.prototype= {
 
-            // ordinamento array
-            feedTemp.sort( function(a,b){
-                var aTime = a.pubdate;
-                var bTime = b.pubdate;
-                if ( aTime > bTime) return -1;
-                if ( aTime == bTime) return 0;
-                if ( aTime < bTime ) return 1;
-                return 0;
-             }
-            );
-
-            // la news piu' recente viene sempre visualizzata
-            var comparedate = feedTemp[0].pubdate;
-            thisObj.feeds.push(feedTemp.shift());
-            thisObj.feeds = thisObj.feeds.concat(feedTemp.filter(function(element, index, array){
-                return comparedate - element.pubdate <= 604800000; // 7 giorni
-            }, thisObj));
-        }
-
-        // Creazione oggetti feed
+    // Creazione oggetti feed
+    readystatechange: function(thisObj){
         if (thisObj.req.status == 200){
             thisObj.req.xml =  thisObj.req.responseText;  
             var feedparser = Components.classes["@mozilla.org/feed-processor;1"]
@@ -58,193 +26,347 @@ function RSSData(source, onLoadFunction){
             feedparser.parseFromString(thisObj.req.xml,
                                        Components.classes["@mozilla.org/network/io-service;1"]
                                        .getService(Components.interfaces.nsIIOService)
-                                       .newURI("file:///" + source.replace(/[^\w]/g,''), null, null));
+                                       .newURI("file:///tmp/" + thisObj.source.replace(/[^\w]/g,''), null, null));
         }
+    },
+    //this.req.onreadystatechange = 
+    // Init permette di ricaricare in modo asincrono il feed ogni ora
+    Init: function(thisObj){
+        thisObj.req.open('GET', thisObj.source, true);//false);
+        thisObj.req.overrideMimeType('text/xml');
+        thisObj.req.send(null);
 
-    }
-    setTimeout(this.Init, 1000, this);
-    setInterval(this.Init, 3600000);
 
-}
+        thisObj.req.onreadystatechange = function(){thisObj.readystatechange(thisObj);};
 
-
-
-var RDFData = {
-    
-
-    //apertura del file
-    open: function (fileName){
-        var file = Components.classes["@mozilla.org/file/local;1"]
-            .createInstance(Components.interfaces.nsILocalFile);
-        file.initWithPath(fileName);
-        if (!file.exists())
-            return null;
-
-        var inputStream = Components.classes["@mozilla.org/network/file-input-stream;1"]
-            .createInstance(Components.interfaces.nsIFileInputStream);
-        //apertura file in modalita' readonly
-        inputStream.init(file, -1, -1, 0);
-        return inputStream.QueryInterface(Components.interfaces.nsILineInputStream);
     },
 
-    cube: new Object(),
-
-    populate: function ()
-    {
-        var stream = this.open(Config.getPrefs("schedule"));
-        if (stream)
-	{
-            var eof ;
-            var data = {};
-
-            // campi del file current.gap:
-            // giorno, sigla, aula, ora_inizio, ora_fine, docente, anno_corso, laurea, codice_corso = i.split(";") 
-            do
-	    {
-                eof = stream.readLine(data);
-                var line = String(data.value);
-                //lines.push(line);
-                var fields = line.split(' ; ');
-
-		var giorno = fields[0];
-		var sigla  = fields[1];
-		var aula   = fields[2];
-		var inizio = fields[3];
-		var fine   = fields[4];
-
-                var treechildren = document.createElement("treechildren");
-                var treeitem     = document.createElement("treeitem");
-                var treerow      = document.createElement("treerow");
-                var treecell     = document.createElement("treecell");
-
-                treechildren.appendChild(treeitem);
-                treeitem.appendChild(treerow);
-
-                treecell.setAttribute("value", sigla);
-                treerow.appendChild(treecell);
-
-                treecell = document.createElement("treecell");
-                treecell.setAttribute("value", aula);
-                treerow.appendChild(treecell);
-
-                treecell = document.createElement("treecell");
-                treecell.setAttribute("value", inizio);
-                treerow.appendChild(treecell);
-
-                treecell = document.createElement("treecell");
-                treecell.setAttribute("value", fine);
-                treerow.appendChild(treecell);
-
-                document.getElementById("schedule").appendChild(treechildren);
-
-
-                if (eof)
-		{
-                    var start = parseInt(fields[3].substr(0,2)); 
-                    var hours = parseInt(fields[4].substr(0,2)) - start;
-
-//                    for(var i = 0; i < hours; i++)
-//		    {
-                        if (this.cube[giorno] == null)
-                            this.cube[giorno] = new Object();
-
-                        if (this.cube[giorno][inizio] == null)
-                            this.cube[giorno][inizio] = new Object();
-
-//                        if (this.cube[giorno][inizio][aula] == null)
-//                            this.cube[fields[0]][(start + i) + ':00'][fields[2]] = new Array();
-
-			this.cube[giorno][inizio][aula] = sigla;
-			jsdump ("--> " + giorno + " - " + inizio + " - " + aula + ": " + this.cube[giorno][inizio][aula]);
-//                  }
-                }
-            } while(eof);
-
-            for (var i in this.cube )
-                for ( var j in i)
-                    for (var x in j)
-                        jsdump(i + ': ' +  j + ': ' + x);
-            stream.close();
-            var tree = document.getElementById("schedule");
+    // listener per gli eventi del feed
+    handleResult: function (result){
+        var time = new Date();
+        if (!result || !result.doc)
+            return;
+        var feedTemp = new Array();
+        var feed = result.doc.QueryInterface(Components.interfaces.nsIFeed);
+        if (!feed.items.length)
+            return;
+        for (var i=0; i<feed.items.length; i++){
+            var feeditem = feed.items.queryElementAt(i,
+                Components.interfaces.nsIFeedEntry);
+            try{
+                feedTemp.push({title: feeditem.title.plainText(),
+                      pubdate: new Date(feeditem.updated),
+                      description: (feeditem.summary?feeditem.summary.plainText():feeditem.content.plainText()),
+                      longdescription: (feeditem.content?feeditem.content.plainText(): "")
+                      });
+                } catch (e) {break;}
         }
-            
-    }
+        // ordinamento array
+        feedTemp.sort( function(a,b){
+            var aTime = a.pubdate;
+            var bTime = b.pubdate;
+            if ( aTime > bTime) return -1;
+            if ( aTime == bTime) return 0;
+            if ( aTime < bTime ) return 1;
+            return 0;
+         }
+        );
+
+        // la news piu' recente viene sempre visualizzata
+        if (!feedTemp[0]) return;
+        var comparedate = feedTemp[0].pubdate;
+        this.feeds.push(feedTemp.shift());
+        this.feeds = this.feeds.concat(feedTemp.filter(function(element, index, array){
+            return comparedate - element.pubdate <= 604800000; // 7 giorni
+        }, this));
+    },
     
+    reload: function(){
+        this.Init(this);
+    }
+
+}
+
+
+function RDFData() {
+    
+    // Inizializzazione RDF Service
+    this.RDF= Components.classes["@mozilla.org/rdf/rdf-service;1"]
+        .getService(Components.interfaces.nsIRDFService);
+
+    this.ds= Components.classes["@mozilla.org/rdf/datasource;1?name=xml-datasource"]
+        .createInstance(Components.interfaces.nsIRDFDataSource);
+}
+
+RDFData.prototype = {
+    //inserimento di un nodo nel grafo rdf
+    assert: function(source, property, target){
+        var _source = (typeof source == "string"? this.RDF.GetResource(source): source);
+        var _property = (typeof property == "string"? this.RDF.GetResource(property): property);
+        var _target = (typeof target == "string"? this.RDF.GetResource(target): target);
+        this.ds.Assert(
+            _source,
+            _property,
+            _target,
+            true
+        );
+    },
+
+    /* generate popola il grafo RDF a partire da un
+     * generico stream e un parser ad esso associato
+     */ 
+    generate: function (stream, parser){
+        var time = new Date();
+        if (stream){
+            var eof ;
+            var days = {};
+            var hours = {};
+            var courses = {};
+            var halls = {};
+            var people = {};
+
+            do{
+                var fields = new Array();
+                eof = parser.getfields(fields);
+                if (eof){
+                    // if giorno non presente
+                    if (!days[fields[parser.const_day]]){
+                        days[fields[parser.const_day]] = this.RDF.GetAnonymousResource();
+                        this.assert(//"urn:day-" + fields[parser.const_day],
+                                    days[fields[parser.const_day]],
+                                    "http://home.netscape.com/NC-rdf#day",
+                                    this.RDF.GetLiteral(fields[parser.const_day]));
+                    }
+                    // if corso non presente
+                    if (!courses[fields[parser.const_course]]){
+                        courses[fields[parser.const_course]] = this.RDF.GetAnonymousResource();
+                        this.assert(//"urn:course-" + fields[parser.const_course],
+                                    courses[fields[parser.const_course]],
+                                    "http://home.netscape.com/NC-rdf#course",
+                                    this.RDF.GetLiteral(fields[parser.const_course]));
+                    }
+                    //if aula non presente
+                    if (!halls[fields[parser.const_room]]){
+                        halls[fields[parser.const_room]] = this.RDF.GetAnonymousResource(); 
+                        this.assert(//"urn:hall-" + fields[parser.const_room],
+                                    halls[fields[parser.const_room]],
+                                    "http://home.netscape.com/NC-rdf#hall",
+                                    this.RDF.GetLiteral(fields[parser.const_room]));
+                    }
+                    //if ora non presente
+                    if (!hours[fields[parser.const_start]]){
+                        hours[fields[parser.const_start]] = this.RDF.GetAnonymousResource();
+                        this.assert(//"urn:hours-" + fields[parser.const_start],
+                                    hours[fields[parser.const_start]],
+                                    "http://home.netscape.com/NC-rdf#hours",
+                                    this.RDF.GetLiteral(fields[parser.const_start]));
+                    }
+                    //if ora non presente
+                    if (!hours[fields[parser.const_stop]]){
+                        hours[fields[parser.const_stop]] = this.RDF.GetAnonymousResource();
+                        this.assert(//"urn:hours-" + fields[parser.const_stop],
+                                    hours[fields[parser.const_stop]],
+                                    "http://home.netscape.com/NC-rdf#hours",
+                                    this.RDF.GetLiteral(fields[parser.const_stop]));
+                    }
+                    this.assert(//"urn:course-" + fields[parser.const_course],
+                                courses[fields[parser.const_course]],
+                                "http://home.netscape.com/NC-rdf#people",
+                                this.RDF.GetLiteral(fields[parser.const_people]));
+                    this.assert(//"urn:course-" + fields[parser.const_course],
+                                courses[fields[parser.const_course]],
+                                "http://home.netscape.com/NC-rdf#courseyear",
+                                this.RDF.GetLiteral(fields[parser.const_courseyear]));
+                    this.assert(//"urn:course-" + fields[parser.const_course],
+                                courses[fields[parser.const_course]],
+                                "http://home.netscape.com/NC-rdf#degree",
+                                this.RDF.GetLiteral(fields[parser.const_degree]));
+                    this.assert(//"urn:course-" + fields[parser.const_course],
+                                courses[fields[parser.const_course]],
+                                "http://home.netscape.com/NC-rdf#code",
+                                this.RDF.GetLiteral(fields[parser.const_code]));
+
+                    var ass = this.RDF.GetAnonymousResource();
+                    this.assert(ass,
+                                "http://home.netscape.com/NC-rdf#start",
+                                hours[fields[parser.const_start]]
+                                );
+                    this.assert(ass,
+                                "http://home.netscape.com/NC-rdf#stop",
+                                hours[fields[parser.const_stop]]
+                                );
+
+                    this.assert(ass,
+                                "http://home.netscape.com/NC-rdf#course",
+                                courses[fields[parser.const_course]]
+                                );
+                    this.assert(ass,
+                                "http://home.netscape.com/NC-rdf#hall",
+                                halls[fields[parser.const_room]]
+                                );
+                    this.assert(ass,
+                                "http://home.netscape.com/NC-rdf#day",
+                                days[fields[parser.const_day]]
+                                );
+                    this.ds.Assert(
+                        this.RDF.GetResource("urn:root"),
+                                this.RDF.GetResource("http://home.netscape.com/NC-rdf#child"),
+                        ass,
+                        true
+                            );
+
+                    
+                }
+            }
+            while(eof);
+            jsdump("Function RDFData.generate: " + (new Date() - time) + "ms");
+            var outputStream = {
+              data: "",
+              close : function(){},
+              flush : function(){},
+              write : function (buffer,count){
+                this.data += buffer;
+                return count;
+              },
+              writeFrom : function (stream,count){},
+              isNonBlocking: false
+            }
+
+            this.ds.QueryInterface(Components.interfaces.nsIRDFXMLSource);
+            this.ds.Serialize(outputStream);
+    
+            //jsdump(outputStream.data);
+            stream.close();
+            return true;
+
+        }
+        return false; 
+    },
+
+    iterator: function() {
+        
+        // generazione data e ora
+        var now = new Date();
+
+        var Iterator = {
+                items: new Array(),
+                nextvalue: -1,
+                next: function(){
+                    this.nextvalue = (this.nextvalue + 1) % this.items.length;
+                    if (this.nextvalue < this.items.length)
+                        return this.items[this.nextvalue];
+                    return null;
+                },
+                hasmoreelements: function(){
+                    return this.nextvalue < this.items.length -1;
+                }
+            };
+
+        // acquisizione nodi data corrente
+        try {
+            var day = this.ds.GetSource(
+                            this.RDF.GetResource(
+                                "http://home.netscape.com/NC-rdf#day"),
+                            this.RDF.GetLiteral(now.getDay()),
+                            true)
+                        .QueryInterface(Components.interfaces.nsIRDFResource);
+            var nodes = this.ds.GetSources(
+                            this.RDF.GetResource(
+                                "http://home.netscape.com/NC-rdf#day"), 
+                            day, 
+                            true);
+        } catch (e) { return Iterator };
+        //var dbg = Math.round(Math.random()*10 + 7 ); //DEBUG!!!
+        //jsdump(dbg); //DEBUG!!! 
+        while (nodes.hasMoreElements()){
+            var item = nodes.getNext().QueryInterface(
+                            Components.interfaces.nsIRDFResource);
+            var start = this.ds.GetTarget(
+                            item,
+                            this.RDF.GetResource(
+                                "http://home.netscape.com/NC-rdf#start"),
+                            true)
+                            .QueryInterface(
+                                Components.interfaces.nsIRDFResource);
+            var start_d = this.ds.GetTarget(
+                            start,
+                            this.RDF.GetResource(
+                                "http://home.netscape.com/NC-rdf#hours"),
+                            true )
+                            .QueryInterface(
+                                Components.interfaces.nsIRDFLiteral);
+            var stop = this.ds.GetTarget(
+                            item,
+                            this.RDF.GetResource(
+                                "http://home.netscape.com/NC-rdf#stop"),
+                            true)
+                            .QueryInterface(
+                                Components.interfaces.nsIRDFResource);
+            var stop_d = this.ds.GetTarget(
+                            stop,
+                            this.RDF.GetResource("http://home.netscape.com/NC-rdf#hours"),
+                            true)
+                            .QueryInterface(
+                                Components.interfaces.nsIRDFLiteral);
+
+            var starttime = new Date();
+            var stoptime = new Date();
+            var currenttime = new Date();
+            var nexttime = new Date();
+            //currenttime.setHours(dbg); // DEBUG!!!
+            nexttime.setHours(currenttime.getHours() + 1 );
+            
+            starttime.setHours(start_d.Value.split(':')[0]);
+            starttime.setMinutes(start_d.Value.split(':')[1]);
+            stoptime.setHours(stop_d.Value.split(':')[0]);
+            stoptime.setMinutes(stop_d.Value.split(':')[1]);
+
+            if ((starttime <= currenttime // E' iniziato
+                    && currenttime <= stoptime) //non e' ancora finito
+                || (currenttime <= starttime  //non e' iniziato
+                    && starttime <= nexttime) //inizia tra massimo un'ora
+               )
+                Iterator.items.push(
+                {
+                    course: this.ds.GetTarget(
+                                this.ds.GetTarget(
+                                    item,
+                                    this.RDF.GetResource("http://home.netscape.com/NC-rdf#course"), 
+                                    true
+                                ).QueryInterface(
+                                    Components.interfaces.nsIRDFResource),
+                                this.RDF.GetResource("http://home.netscape.com/NC-rdf#course"),
+                                true
+                            ).QueryInterface(
+                                Components.interfaces.nsIRDFLiteral),
+                    hall: this.ds.GetTarget(
+                                this.ds.GetTarget(
+                                    item,
+                                    this.RDF.GetResource("http://home.netscape.com/NC-rdf#hall"), 
+                                    true
+                                ).QueryInterface(
+                                    Components.interfaces.nsIRDFResource),
+                                this.RDF.GetResource("http://home.netscape.com/NC-rdf#hall"),
+                                true
+                            ).QueryInterface(
+                                Components.interfaces.nsIRDFLiteral),
+                    people: this.ds.GetTarget(
+                                this.ds.GetTarget(
+                                    item,
+                                    this.RDF.GetResource("http://home.netscape.com/NC-rdf#course"), 
+                                    true
+                                ).QueryInterface(
+                                    Components.interfaces.nsIRDFResource),
+                                this.RDF.GetResource("http://home.netscape.com/NC-rdf#people"),
+                                true
+                            ).QueryInterface(
+                                Components.interfaces.nsIRDFLiteral),
+                    start: starttime,
+                    stop: stoptime
+                }
+                );
+        }
+        return Iterator;
+    }
 };
 
-
-function Text (){
-
-    this.normalize = function(str) {
-        return str.replace(/\n/g ,' ').toLowerCase();
-    }
-}
-
-
-var rssRoundRobin = 0;
-var scrollTextIntervalId = null;
-var scrollTitleIntervalId = null;
-var completeScrollText = true;
-var completeScrollTitle = true;
-function switchNewsTicker(rssSources){
-    // selezione di un feed rss
-    var rss = rssSources[rssRoundRobin].source;
-    if (!rss.feeds || !completeScrollText || !completeScrollTitle) return; 
-
-    if (rss.feeds.length > 0){
-        var fx = new Effects();
-        function next(){
-            // acquisizione delle label
-            var rssTitle = document.getElementById("rsstitle"); 
-            var rssDate = document.getElementById("rssdate");
-            var rssText = document.getElementById("rsstext");
-            var rssTextScroll = document.getElementById('rsstextscroll');
-            var rssTitleScroll = document.getElementById('rsstitlescroll');
-
-            // visualizzazione dei valori delle label
-            rssTitle.value = (new Text()).normalize(rss.feeds[0].title);
-            rssDate.value = rss.feeds[0].pubdate.toLocaleDateString();
-            rssText.value = (new Text()).normalize(rss.feeds[0].description);
-            //rssText.textContent = (new Text()).normalize(rss.feeds[0].description);
-
-            var scrolltext = rssTextScroll.boxObject
-                .QueryInterface(Components.interfaces.nsIScrollBoxObject);
-            var scrolltitle = rssTitleScroll.boxObject
-                .QueryInterface(Components.interfaces.nsIScrollBoxObject);
-
-            if (scrollTextIntervalId)
-                clearInterval(scrollTextIntervalId);
-            completeScrollText = false;
-            scrollTextIntervalId = setInterval( function (scroll, obj ){
-                var offset = obj.boxObject.screenX;
-                scroll.scrollBy(10,0);
-                if (obj.boxObject.screenX == offset)
-                    completeScrollText = true;
-            },  100, scrolltext, rssText);
-            
-
-            if (scrollTitleIntervalId)
-                clearInterval(scrollTitleIntervalId);
-            completeScrollTitle = false;
-            scrollTitleIntervalId = setInterval( function (scroll, obj, direction){
-                var offset = obj.boxObject.screenX;
-                if (!direction)
-                    scroll.scrollBy(10,0);
-                else
-                    scroll.scrollBy(-10,0);
-                if (obj.boxObject.screenX == offset)
-                    completeScrollTitle = true;
-            }, 150, scrolltitle, rssTitle, false)
-        } 
-
-        //fx.curtain('newsticker', FXV_CURTAIN_CLOSE, next);
-        //fx.curtain('newsticker', FXV_CURTAIN_OPEN, null);
-        next();
-
-        // ruota le news
-        rss.feeds.push(rss.feeds.shift());
-    }
-
-    // cicla per selezionare il prossimo feed
-    rssRoundRobin = (rssRoundRobin + 1) % rssSources.length;
-}

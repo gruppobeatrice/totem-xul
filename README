@@ -19,4 +19,48 @@
 
 Eseguire l'applicazione:
 
-    xulrunner application.ini
+    Se si dispone di xulrunner e' sufficiente posizionarsi
+    nella directory principale dell'applicazione e digitare
+
+        xulrunner application.ini
+
+    (e' preferibile usare la versione 1.9 di xulrunner che
+    apporta diverse migliorie alla gestione di javascript e
+    dei widget nativi)
+
+    E' anche possibile avviare l'applicazione usando firefox3:
+
+        firefox -app application.ini
+
+Debug
+    
+    Per accedere alla finestra di debug e' sufficiente premere
+    la combinazione di tasti CTRL+D
+
+
+Modificare le impostazioni di default
+
+    Premendo CTRL+P si accede alla finestra delle impostazioni.
+    usando la casella filter e' possibile filtrare solo
+    le impostazioni relative al funzionamento del totem. Quindi,
+    Scrivendo "totem" si ottiene il branch delle impostazioni
+    dell'applicazioni, che comprende ad ora:
+        - gli url dei feed rss visualizzati (totem.url.*)
+        - il path in cui si trova l'orario di occupazione aule
+          (totem.schedule)
+        - il numero di colonne usate per visualizzare gli orari
+          (totem.schedule.columns)
+    Le modifiche vengono apportate automaticamente nel giro di
+    mezzora. In alternativa e' sufficiente riavviare l'applicazione.
+
+
+Usare piu' profili
+
+    Usando la piattaforma XULRunner e' possibile avviare
+    l'applicazione usando uno o piu' profili differenti.
+    E' sufficiente usare l'opzione -P <profilo> per
+    caricare un <profilo>, oppure l'opzione -ProfileManager
+    per avviare il gestore di profili
+
+    Tutti i profili sono salvati (In linux) nella directory
+    .gbeatrice/totem all'interno della propria home

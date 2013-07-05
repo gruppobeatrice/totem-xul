@@ -14,22 +14,32 @@
     style="background: #fff"
     onload="doInit()">
 
+    <script type="text/javascript" src="chrome://totem/content/support.js" />
+    <script type="text/javascript" src="chrome://totem/content/files.js" />
+    <script type="text/javascript" src="chrome://totem/content/thread.js" />
     <script type="text/javascript" src="chrome://totem/content/debug.js" />
     <script type="text/javascript" src="chrome://totem/content/config.js" />
     <script type="text/javascript" src="chrome://totem/content/effects.js" />
     <script type="text/javascript" src="chrome://totem/content/date.js" />
     <script type="text/javascript" src="chrome://totem/content/datasources.js" />
+    <script type="text/javascript" src="chrome://totem/content/ical.js" />
+    <script type="text/javascript" src="chrome://totem/content/ui.js" />
+    <script type="text/javascript" src="chrome://totem/content/cron.js" />
     <script type="text/javascript" src="chrome://totem/content/core.js"/>
 
     <keyset>
         <key id="debug-key" modifiers="control" key="D" command="cmd_debug"/>
         <key id="config-key" modifiers="control" key="P" command="cmd_config"/>
+        <key id="stats-key" modifiers="control" key="W" command="cmd_stats"/>
+        <key id="rss-key" modifiers="control" key="R" command="cmd_rss"/>
     </keyset>
     <commandset>
         <command id="cmd_debug" oncommand="debug();"/>
         <command id="cmd_config" oncommand="config();"/>
+        <command id="cmd_stats" oncommand="stats();"/>
+        <command id="cmd_rss" oncommand="reload();"/>
     </commandset>
-    <vbox flex="1" >
+    <vbox flex="1">
         <hbox id="heading" >
             <vbox flex="1" id="title">
                 <label>News!</label>
@@ -37,78 +47,37 @@
             </vbox>
             <vbox id="hticker" ><label value="00:00:00" id="datetime" /></vbox>
         </hbox>
-        <!--
-        <vbox flex="1" id="schedule" datasources="urn:null">
-            <template>
-                    <query>
-                        <content uri="?list" />
-                    </query>
-                    <actions>
-                        <button uri="?list" label="?list - b - c"/> 
-                    </actions>
-            </template>
-            <tree datasources="urn:null"
-                  id="schedule"
-                  flags="dont-build-content"
-                  flex="1">
-                <treecols>
-                    <treecol label="Corso"  primary="true" flex="1"/>
-                    <treecol label="Aula"  flex="1"/>
-                    <treecol label="Ora inizio"  flex="1"/>
-                    <treecol label="Ora fine"  flex="1"/>
-                </treecols>
-                    <template>
-                        <rule>
-                            <treechildren>
-                                <treeitem uri="rdf:*">
-                                    <treerow>
-                                        <treecell label="rdf:http://home.netscape.com/NC-rdf#course" />
-                                        <treecell label="rdf:http://home.netscape.com/NC-rdf#hall" />
-                                        <treecell label="rdf:http://home.netscape.com/NC-rdf#start" />
-                                        <treecell label="rdf:http://home.netscape.com/NC-rdf#stop" />
-                                    </treerow>
-                                </treeitem>
-                            </treechildren>
-                        </rule>
-                    </template>
-            </tree>
-        </vbox> -->
-
-        <tree id="schedule" flex="1">
-            <treecols>
-                <treecol label="Corso"  primary="true" flex="1"/>
-                <treecol label="Aula"  flex="1"/>
-                <treecol label="Ora inizio"  flex="1"/>
-                <treecol label="Ora fine"  flex="1"/>
-            </treecols>
-            <treechildren>
-               <treeitem>
-                    <treerow>
-                        <treecell label="Pippo" />
-                        <treecell label="ASD" />
-                        <treecell label="jasdf" />
-                        <treecell label="asdkf" />
-                    </treerow>
-                </treeitem>
-               <treeitem>
-                    <treerow>
-                        <treecell label="Pisdfsdfo" />
-                        <treecell label="Aasdff" />
-                        <treecell label="jasdf" />
-                        <treecell label="asdkf" />
-                    </treerow>
-                </treeitem>
-            </treechildren>
-        </tree>
-
-        <vbox id="newsticker" >
-            <scrollbox id="rsstitlescroll">
-                <label id="rsstitle" >Title</label>
-            </scrollbox>
-            <label id="rssdate">date</label>
-            <scrollbox id="rsstextscroll">
-                <description id="rsstext" flex="1">text value</description>
-            </scrollbox>
-        </vbox>
+        <stack flex="2" id="center">
+            <stack id="stackschedule">
+                <scrollbox id="schedule" orient="vertical">
+                    <hbox id="scheduleinlay" flex="1"/>
+                </scrollbox>
+                <vbox id="beforeschedule"/>
+                <vbox flex="0">
+                    <label id="scheduletitle" >Corsi attivi nelle prossime ore</label>
+                </vbox>
+            </stack>
+            <stack id="stackevent">
+                <scrollbox id="event" orient="vertical">
+                    <vbox id="eventinlay" flex="1">
+                    <label id="eventtitle" />
+                    <label id="eventsummary" crop="end"/>
+                    <description id="eventdescription" flex="1"/>
+                    </vbox>
+                </scrollbox>
+            </stack>
+        </stack>
+        <bulletinboard>
+            <vbox id="newsticker"  flex="1">
+                <scrollbox id="rsstitlescroll">
+                    <!--<hbox id="rsstitle" flex="1"/>-->
+                </scrollbox>
+                <!--<label id="rssdate"/>-->
+                <scrollbox id="rsstextscroll">
+                    <!--<description id="rsstext" flex="1"/>-->
+                </scrollbox>
+            </vbox>
+            <vbox id="stats"><label/></vbox>
+        </bulletinboard> 
     </vbox>
 </window>
