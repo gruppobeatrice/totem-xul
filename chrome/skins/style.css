@@ -1,0 +1,61 @@
+window{
+padding: 0px;
+margin: 0px;
+}
+
+#heading{
+background: url(chrome://totem/skin/logototem.png) no-repeat;
+padding: 0px;
+margin: 0px;
+font-family: "Trebuchet MS", sans-serif;
+font-size: 60pt;
+font-weight: bold;
+}
+
+#title{
+background: url(chrome://totem/skin/bgtotem.png ) repeat-x  top left;
+height: 140px;
+padding: 0px;
+margin-left: 240px;
+-moz-box-align: baseline;
+}
+
+#subpar{
+font-size: medium;
+}
+
+#hticker{
+padding-right: 10px;
+padding-bottom: 10px;
+background: url(chrome://totem/skin/bgtotem.png ) repeat-x  top left;
+-moz-border-radius: 0px 0px 10px 10px;
+/*border: solid 1px #f0f0f0;*/
+overflow: hidden;
+}
+
+#hidden{
+-moz-border-radius: 10px;
+height: 60px;
+background: yellow;
+}
+
+#datetime{
+overflow: hidden;
+}
+
+#newsticker{
+border-top: dotted 1px #000;
+padding-left: 104px;
+background: url(chrome://totem/skin/rss.png ) no-repeat center left;
+}
+
+#rsstitle{
+font-size: 60pt;
+font-family: "Trebuchet MS", sans-serif;
+}
+
+#rsstext{
+/*display: none;*/
+font-family: Arial, Helvetica, sans-serif;
+font-size: 20pt;
+}

@@ -1,0 +1,22 @@
+* TOTEM informazioni CLI *
+
+    applicazione xulrunner realizzata per fornire
+    informazioni utili sul CDC, quali
+
+    * news Dipartimento/CDC (prese dai feed RSS)
+
+    * informazioni sull'occupazione delle aule.
+
+    il sistema completo si compone di:
+
+    - xulrunner come piattaforma di avvio dell'applicazione
+
+    - il pacchetto sorgenti contenuti in questa directory
+
+    - un computer su cui avviare X11 con un window manager non
+    invasivo (ed esempio xmonad)
+
+
+Eseguire l'applicazione:
+
+    xulrunner application.ini

@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+<RDF:RDF xmlns:NC="http://home.netscape.com/NC-rdf#"
+         xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <RDF:Description RDF:about="urn:hall-c1"
+                   NC:hall="c1" />
+  <RDF:Description RDF:about="rdf:#$IhFIU2">
+    <NC:start RDF:resource="urn:hours-14:00"/>
+    <NC:stop RDF:resource="urn:hours-16:00"/>
+    <NC:course RDF:resource="urn:course-al-a"/>
+    <NC:hall RDF:resource="urn:hall-d1"/>
+    <NC:day RDF:resource="urn:day-1"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$GhFIU2">
+    <NC:start RDF:resource="urn:hours-16:00"/>
+    <NC:stop RDF:resource="urn:hours-18:00"/>
+    <NC:course RDF:resource="urn:course-adi-u"/>
+    <NC:hall RDF:resource="urn:hall-c1"/>
+    <NC:day RDF:resource="urn:day-1"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$KhFIU2">
+    <NC:start RDF:resource="urn:hours-9:00"/>
+    <NC:stop RDF:resource="urn:hours-11:00"/>
+    <NC:course RDF:resource="urn:course-al-b"/>
+    <NC:hall RDF:resource="urn:hall-b"/>
+    <NC:day RDF:resource="urn:day-2"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="urn:hours-13:00"
+                   NC:hours="13:00" />
+  <RDF:Description RDF:about="urn:hours-16:00"
+                   NC:hours="16:00" />
+  <RDF:Description RDF:about="urn:hours-18:00"
+                   NC:hours="18:00" />
+  <RDF:Description RDF:about="urn:day-1"
+                   NC:day="1" />
+  <RDF:Description RDF:about="urn:hall-a"
+                   NC:hall="a" />
+  <RDF:Description RDF:about="urn:root">
+    <NC:child RDF:resource="rdf:#$DhFIU2"/>
+    <NC:child RDF:resource="rdf:#$EhFIU2"/>
+    <NC:child RDF:resource="rdf:#$FhFIU2"/>
+    <NC:child RDF:resource="rdf:#$GhFIU2"/>
+    <NC:child RDF:resource="rdf:#$HhFIU2"/>
+    <NC:child RDF:resource="rdf:#$IhFIU2"/>
+    <NC:child RDF:resource="rdf:#$JhFIU2"/>
+    <NC:child RDF:resource="rdf:#$KhFIU2"/>
+    <NC:child RDF:resource="rdf:#$LhFIU2"/>
+    <NC:child RDF:resource="rdf:#$MhFIU2"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="urn:hours-11:00"
+                   NC:hours="11:00" />
+  <RDF:Description RDF:about="urn:hours-9:00"
+                   NC:hours="9:00" />
+  <RDF:Description RDF:about="urn:course-adi-u"
+                   NC:course="adi-u"
+                   NC:people="pagli"
+                   NC:courseyear="0"
+                   NC:degree="wif"
+                   NC:code="2635" />
+  <RDF:Description RDF:about="rdf:#$JhFIU2">
+    <NC:start RDF:resource="urn:hours-11:00"/>
+    <NC:stop RDF:resource="urn:hours-13:00"/>
+    <NC:course RDF:resource="urn:course-al-b"/>
+    <NC:hall RDF:resource="urn:hall-a"/>
+    <NC:day RDF:resource="urn:day-5"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$EhFIU2">
+    <NC:start RDF:resource="urn:hours-14:00"/>
+    <NC:stop RDF:resource="urn:hours-16:00"/>
+    <NC:course RDF:resource="urn:course-aa-u"/>
+    <NC:hall RDF:resource="urn:hall-b"/>
+    <NC:day RDF:resource="urn:day-3"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="urn:hall-d1"
+                   NC:hall="d1" />
+  <RDF:Description RDF:about="urn:course-al-b"
+                   NC:course="al-b"
+                   NC:people="acquistapace"
+                   NC:courseyear="1"
+                   NC:degree="inf"
+                   NC:code="2536" />
+  <RDF:Description RDF:about="rdf:#$DhFIU2">
+    <NC:start RDF:resource="urn:hours-14:00"/>
+    <NC:stop RDF:resource="urn:hours-16:00"/>
+    <NC:course RDF:resource="urn:course-aa-u"/>
+    <NC:hall RDF:resource="urn:hall-b"/>
+    <NC:day RDF:resource="urn:day-2"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="urn:hall-b"
+                   NC:hall="b" />
+  <RDF:Description RDF:about="urn:day-5"
+                   NC:day="5" />
+  <RDF:Description RDF:about="urn:day-3"
+                   NC:day="3" />
+  <RDF:Description RDF:about="urn:course-am-a"
+                   NC:course="am-a"
+                   NC:people="sassetti"
+                   NC:courseyear="1"
+                   NC:degree="inf"
+                   NC:code="2516" />
+  <RDF:Description RDF:about="rdf:#$HhFIU2">
+    <NC:start RDF:resource="urn:hours-11:00"/>
+    <NC:stop RDF:resource="urn:hours-13:00"/>
+    <NC:course RDF:resource="urn:course-al-a"/>
+    <NC:hall RDF:resource="urn:hall-a"/>
+    <NC:day RDF:resource="urn:day-3"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="urn:course-al-a"
+                   NC:course="al-a"
+                   NC:people="di_stefano"
+                   NC:courseyear="1"
+                   NC:degree="inf"
+                   NC:code="2535" />
+  <RDF:Description RDF:about="rdf:#$MhFIU2">
+    <NC:start RDF:resource="urn:hours-9:00"/>
+    <NC:stop RDF:resource="urn:hours-11:00"/>
+    <NC:course RDF:resource="urn:course-am-a"/>
+    <NC:hall RDF:resource="urn:hall-a"/>
+    <NC:day RDF:resource="urn:day-1"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="urn:day-2"
+                   NC:day="2" />
+  <RDF:Description RDF:about="rdf:#$FhFIU2">
+    <NC:start RDF:resource="urn:hours-11:00"/>
+    <NC:stop RDF:resource="urn:hours-13:00"/>
+    <NC:course RDF:resource="urn:course-adi-u"/>
+    <NC:hall RDF:resource="urn:hall-c1"/>
+    <NC:day RDF:resource="urn:day-4"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="urn:course-aa-u"
+                   NC:course="aa-u"
+                   NC:people="starita"
+                   NC:courseyear="0"
+                   NC:degree="wif"
+                   NC:code="2636" />
+  <RDF:Description RDF:about="urn:day-4"
+                   NC:day="4" />
+  <RDF:Description RDF:about="urn:hours-14:00"
+                   NC:hours="14:00" />
+  <RDF:Description RDF:about="rdf:#$LhFIU2">
+    <NC:start RDF:resource="urn:hours-11:00"/>
+    <NC:stop RDF:resource="urn:hours-13:00"/>
+    <NC:course RDF:resource="urn:course-am-a"/>
+    <NC:hall RDF:resource="urn:hall-a"/>
+    <NC:day RDF:resource="urn:day-2"/>
+  </RDF:Description>
+</RDF:RDF>
+

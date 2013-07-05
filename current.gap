@@ -1,0 +1,10 @@
+2 ; aa-u ; b ; 14:00 ; 16:00 ; starita ; 0 ; wif ; 2636
+3 ; aa-u ; b ; 14:00 ; 16:00 ; starita ; 0 ; wif ; 2636
+4 ; adi-u ; c1 ; 11:00 ; 13:00 ; pagli ; 0 ; wif ; 2635
+1 ; adi-u ; c1 ; 16:00 ; 18:00 ; pagli ; 0 ; wif ; 2635
+3 ; al-a ; a ; 11:00 ; 13:00 ; di_stefano ; 1 ; inf ; 2535
+1 ; al-a ; d1 ; 14:00 ; 16:00 ; di_stefano ; 1 ; inf ; 2535
+5 ; al-b ; a ; 11:00 ; 13:00 ; acquistapace ; 1 ; inf ; 2536
+2 ; al-b ; b ; 9:00 ; 11:00 ; acquistapace ; 1 ; inf ; 2536
+2 ; am-a ; a ; 11:00 ; 13:00 ; sassetti ; 1 ; inf ; 2516
+1 ; am-a ; a ; 9:00 ; 11:00 ; sassetti ; 1 ; inf ; 2516

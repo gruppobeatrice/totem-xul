@@ -1,0 +1,14 @@
+pref("toolkit.defaultChromeURI", "chrome://totem/content/startPage.xul");
+//pref("browser.dom.window.dump.enabled", true);
+pref("javascript.options.showInConsole", true);
+pref("javascript.options.strict", true);
+pref("toolkit.scrollbox.smoothScroll", true);
+pref("content.switch.threshold", 10);
+pref("content.interrupt.parsing", false);
+//pref("nglayout.debug.disable_xul_cache", true);
+//pref("nglayout.debug.disable_xul_fastload", true);
+pref("totem.url.1", "http://beatrice.cli.di.unipi.it/pub/rss/rss_di.py.xml");
+pref("totem.url.2", "http://beatrice.cli.di.unipi.it/web/news/RSS");
+pref("totem.url.3", "http://www.cli.di.unipi.it/feed.php");
+pref("totem.url.4", "http://news.google.it/?output=atom");
+pref("totem.schedule", "/home/src/totem-xul/current.gap");
